@@ -5,6 +5,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import model.Model;
+import controller.Controller;
 
 /**
  * Created by Jonas on 03.07.2015.
@@ -55,9 +57,13 @@ public class Startscreen extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == start){
             JOptionPane.showMessageDialog(null, "test");
+            Gui gui = new Gui();
+            Model model = new Model(gui.getWidth(), gui.getHeight());
+            Controller controller = new Controller();
         }else if(e.getSource() == end){
             System.exit(0);
         }
+
 
     }
 }

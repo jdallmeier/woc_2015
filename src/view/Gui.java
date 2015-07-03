@@ -15,7 +15,7 @@ public class Gui {
         return width;
     }
 
-    public int getHeigth() {
+    public int getHeight() {
         return heigth;
     }
 }
