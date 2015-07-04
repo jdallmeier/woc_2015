@@ -1,5 +1,3 @@
-import model.Model;
-import view.Gui;
 import view.Startscreen;
 import java.awt.EventQueue;
 
