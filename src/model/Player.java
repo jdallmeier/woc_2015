@@ -39,6 +39,10 @@ public class Player {
         return y;
     }
 
+    public void setOpponent(Player opponent) {
+        this.opponent = opponent;
+    }
+
     public void draw(PGraphics g) {
         g.rect(x,y,player_width,30);
     }
@@ -77,18 +81,13 @@ public class Player {
                 x = x - speed;
                 playerWin();
             } else {
-                x = x + player_distance;
+                x = x - player_distance;
                 playerWin();
             }
         }
         else{
-            x = x + speed;
-            playerWin();
-        }
-
-
-        if((x-speed-player_width)<xO) {
             x = x - speed;
+            playerWin();
         }
     }
 
