@@ -17,6 +17,7 @@ public class Player {
     float y;
     float speed;
     float player_width;
+    float player_height;
     Player opponent;
     Position position;
 
@@ -32,6 +33,7 @@ public class Player {
         }
         this.speed = gui.speed;
         player_width = 10;
+        player_height = 30;
     }
 
     public float getX() {
@@ -47,7 +49,7 @@ public class Player {
     }
 
     public void draw(PGraphics g) {
-        g.rect(x, y, player_width, 30);
+        g.rect(x, y, player_width, player_height);
 
     }
 
@@ -64,38 +66,58 @@ public class Player {
     }
 
     public void moveRight() {
-        float xO = opponent.getX();
-        float player_distance = xO - (x + player_width);
-        if (player_distance > speed) {
-            x = x + speed;
-            playerWin();
-        } else {
-            if(x>xO){
+        if(y == opponent.getY()){
+            float xO = opponent.getX();
+            float player_distance;
+            if(x<xO) {
+                player_distance = xO - (x + player_width);
+            } else {
+                player_distance = x - (xO + player_width);
+            }
+            if (player_distance > speed) {
                 x = x + speed;
                 playerWin();
+            } else {
+                if(x>xO){
+                    x = x + speed;
+                    playerWin();
+                }
+                else{
+                    x = x + player_distance;
+                    playerWin();
+                }
             }
-            else{
-                x = x + player_distance;
-                playerWin();
-            }
+        } else {
+            x = x + speed;
+            playerWin();
         }
     }
 
     public void moveLeft() {
-        float xO = opponent.getX();
-        float player_distance = xO - (x + player_width);
-        if (player_distance > speed) {
-            x = x - speed;
-            playerWin();
-        } else {
-            if(x>xO){
+        if(y == opponent.getY()) {
+            float xO = opponent.getX();
+            float player_distance;
+            if(x<xO) {
+                player_distance = xO - (x + player_width);
+            } else {
+                player_distance = x - (xO + player_width);
+            }
+            if (player_distance > speed) {
                 x = x - speed;
                 playerWin();
+            } else {
+                if(x<xO){
+                    x = x - speed;
+                    playerWin();
+                }
+                else{
+                    x = x - player_distance;
+                    playerWin();
+                }
             }
-            else{
-                x = x - player_distance;
-                playerWin();
-            }
+        } else {
+            x = x - speed;
+            playerWin();
         }
     }
 
