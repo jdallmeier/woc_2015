@@ -20,7 +20,7 @@ public class Player {
     float player_height;
     Player opponent;
     Position position;
-
+    boolean onTop;
     public Player(Position p, Gui gui) {
         this.position = p;
         this.gui = gui;
@@ -34,6 +34,7 @@ public class Player {
         this.speed = gui.speed;
         player_width = 10;
         player_height = 30;
+        onTop = false;
     }
 
     public float getX() {
@@ -49,7 +50,13 @@ public class Player {
     }
 
     public void draw(PGraphics g) {
-        g.rect(x, y, player_width, player_height);
+        if(playerDistance() > 0 && onTop) {
+            y = y + player_height;
+            g.rect(x, y, player_width, player_height);
+            onTop = false;
+        }  else {
+            g.rect(x, y, player_width, player_height);
+        }
 
     }
 
@@ -65,15 +72,20 @@ public class Player {
         }
     }
 
+    public float playerDistance(){
+        float xO = opponent.getX();
+        if((x+player_width)<=xO) {
+            return xO - (x + player_width);
+        } else {
+            return x - (xO + player_width);
+        }
+    }
+
     public void moveRight() {
         if(y == opponent.getY()){
             float xO = opponent.getX();
-            float player_distance;
-            if(x<xO) {
-                player_distance = xO - (x + player_width);
-            } else {
-                player_distance = x - (xO + player_width);
-            }
+            float player_distance = playerDistance();
+
             if (player_distance > speed) {
                 x = x + speed;
                 playerWin();
@@ -134,16 +146,25 @@ public class Player {
     }
 
     public void jump() {
-        y = y - 40;
-        gui.delayedActions.add(new DelayedAction(System.currentTimeMillis() +200) {
-            @Override
-            public void run() {
-                jumpDown();
-            }
-        });
+        if(!onTop) {
+            y = y - 40;
+            gui.delayedActions.add(new DelayedAction(System.currentTimeMillis() + 200) {
+                @Override
+                public void run() {
+                    jumpDown();
+                }
+            });
+        }
     }
 
     public void jumpDown() {
-        y = y + 40;
+        if(!onTop){
+            if((playerDistance()+player_width) < player_width){
+                y = y + 10;
+                onTop = true;
+            } else {
+                y = y +40;
+            }
+        }
     }
 }
