@@ -20,6 +20,10 @@ public class Player {
     boolean bulletActive;
     Bullet bullet;
 
+    //Countdown
+    long time = 0;
+    int counter;
+    boolean countdown = false;
 
 
     int WinCount=0;
@@ -35,6 +39,9 @@ public class Player {
     }
 
     public void init() {
+        gui.pressedKeys.clear();
+        gui.blockedKeys.clear();
+        gui.delayedActions.clear();
         if (position == Position.LEFT) {
             x = 30;
             y = gui.height-60;
@@ -92,6 +99,31 @@ public class Player {
             } else {
                 opponent.block(2500);
                 bulletActive = false;
+            }
+        }
+
+        if(countdown == true){
+            g.textSize(40);
+            g.fill(0,255,0);
+            g.text(counter, g.width / 2 - 5, 35);
+        }
+
+
+        if(countdown == true && counter > 0) {
+            gui.keysBlocked = true;
+            if (System.currentTimeMillis() - time >= 1000) {
+                counter = counter-1;
+                time = System.currentTimeMillis();
+//                g.textSize(40);
+//                g.fill(0,255,0);
+//                g.text(counter, g.width / 2 - 5, 35);
+            }
+        } else {
+            if(countdown == true && counter == 0) {
+                countdown = false;
+                gui.keysBlocked = false;
+                init();
+                opponent.init();
             }
         }
 
@@ -206,12 +238,12 @@ public class Player {
     }
 
     public void playerWin() {
-        if (position == Position.LEFT && this.WinCount == 3) {
+        if (position == Position.LEFT && this.WinCount == 2) {
             if (x >= 990) {
                 gui.blockAllKeys();
                 gui.showMenu('l');
             }
-        } else if(position == Position.RIGHT && this.WinCount == 3){
+        } else if(position == Position.RIGHT && this.WinCount == 2){
             if (x <= 10) {
                 gui.blockAllKeys();
                 gui.showMenu('r');
@@ -219,14 +251,20 @@ public class Player {
         }
 
         if (position == Position.LEFT) {
-            if (x >= 990) {
+             if (x >= 990) {
                 this.WinCount = this.WinCount + 1;
-                gui.initPlayers();
+                init();
+                countdown = true;
+                counter = 4;
+
+
             }
         } else {
             if (x <= 10) {
                 this.WinCount = this.WinCount + 1;
-                gui.initPlayers();
+                init();
+                countdown = true;
+                counter = 4;
             }
         }
     }

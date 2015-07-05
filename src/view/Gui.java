@@ -71,16 +71,18 @@ public class Gui extends PApplet {
     }
 
     public void mousePressed(){
-        //Wenn Button "Neu Starten" gedrückt wird
-        if(mouseX > (width/2-180) && mouseX < (width/2-30) && mouseY > (height/2+20) && mouseY < (height/2+70) ){
-            loop();
-            keysBlocked = false;
-            initPlayers();
-        }
+        if(keysBlocked) {
+            //Wenn Button "Neu Starten" gedrückt wird
+            if (mouseX > (width / 2 - 180) && mouseX < (width / 2 - 30) && mouseY > (height / 2 + 20) && mouseY < (height / 2 + 70)) {
+                loop();
+                keysBlocked = false;
+                initPlayers();
+            }
 
-        //Wenn Button "Beenden" gerueckt wird
-        if(mouseX > (width/2+30) && mouseX < (width/2+180) && mouseY > (height/2+20) && mouseY < (height/2+70) ){
-            System.exit(0);
+            //Wenn Button "Beenden" gerueckt wird
+            if (mouseX > (width / 2 + 30) && mouseX < (width / 2 + 180) && mouseY > (height / 2 + 20) && mouseY < (height / 2 + 70)) {
+                System.exit(0);
+            }
         }
 
     }
