@@ -33,11 +33,11 @@ public class Player {
 
     public void init() {
         if (position == Position.LEFT) {
-            x = 10;
-            y = 350;
+            x = 30;
+            y = gui.height-30;
         } else {
-            x = 990;
-            y = 350;
+            x = gui.width - (30+player_width);
+            y = gui.height-30;
         }
         this.speed = gui.speed;
         player_width = 10;
