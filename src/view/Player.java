@@ -22,6 +22,9 @@ public class Player {
     Player opponent;
     Position position;
     boolean onTop;
+    boolean bulletActive;
+    Bullet bullet;
+
     public Player(Position p, Gui gui) {
         this.position = p;
         this.gui = gui;
@@ -29,6 +32,7 @@ public class Player {
         this.speed = gui.speed;
         player_width = 10;
         player_height = 30;
+        bulletActive = false;
     }
 
     public void init() {
@@ -76,18 +80,59 @@ public class Player {
             g.rect(x, y, player_width, player_height);
         }
 
+        if(bulletActive){
+            if(!bullet.collision(opponent)) {
+                bullet.move();
+                float bulletX = bullet.getX();
+                float bulletY = bullet.getY();
+                g.ellipse(bulletX, bulletY, 15, 15);
+            } else {
+                opponent.block(2500);
+                bulletActive = false;
+            }
+        }
+
+    }
+
+    public float getPlayer_width() {
+        return player_width;
+    }
+
+    public void block(int blockTime){
+        gui.blockedKeys.put((position == Position.LEFT ? VK_W : VK_UP), System.currentTimeMillis() + blockTime);
+        gui.blockedKeys.put((position == Position.LEFT ? VK_D : VK_RIGHT), System.currentTimeMillis() + blockTime);
+        gui.blockedKeys.put((position == Position.LEFT ? VK_S : VK_DOWN), System.currentTimeMillis() + blockTime);
+        gui.blockedKeys.put((position == Position.LEFT ? VK_A : VK_LEFT), System.currentTimeMillis() + blockTime);
+
+    }
+
+    public float getPlayer_height() {
+        return player_height;
     }
 
     public void interact() {
+        //Directional keys
         if (gui.isKeyPressed(position == Position.LEFT ? VK_A : VK_LEFT)) {
             moveLeft();
         } else if (gui.isKeyPressed((position == Position.LEFT ? VK_D : VK_RIGHT))) {
             moveRight();
         }
+
+        //Jump key
         if (gui.isKeyPressed((position == Position.LEFT ? VK_W : VK_UP))) {
             jump();
             gui.blockedKeys.put((position == Position.LEFT ? VK_W : VK_UP), System.currentTimeMillis() + 500);
         }
+        //Shooting key
+        if (gui.isKeyPressed((position == Position.LEFT ? VK_S : VK_DOWN))){
+            shoot();
+            gui.blockedKeys.put((position == Position.LEFT ? VK_S : VK_DOWN), System.currentTimeMillis() + 3500);
+        }
+    }
+
+    public void shoot(){
+        bullet = new Bullet(x,y+(player_height/2),position,10);
+        bulletActive = true;
     }
 
     public float playerDistance(){
