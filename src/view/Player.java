@@ -1,11 +1,6 @@
 package view;
 
-
 import processing.core.PGraphics;
-
-import javax.swing.*;
-import java.util.concurrent.TimeUnit;
-
 import static java.awt.event.KeyEvent.*;
 
 /**
@@ -203,25 +198,16 @@ public class Player {
     }
 
     public void playerWin() {
-        String[] strings = {"Spiel neu starten","Spiel beenden"};
-        int exit = -1;
         if (position == Position.LEFT) {
             if (x >= 990) {
-                //PlayerLeft wins
-                exit = JOptionPane.showOptionDialog(null,"Linker Spieler hat gewonnen", "Gewonnen",JOptionPane.PLAIN_MESSAGE,JOptionPane.PLAIN_MESSAGE,null,strings,0);
+                gui.blockAllKeys();
+                gui.showMenu('l');
             }
         } else {
             if (x <= 10) {
-                //PlayerRight wins
-                exit = JOptionPane.showOptionDialog(null,"Rechter Spieler hat gewonnen", "Gewonnen",JOptionPane.PLAIN_MESSAGE,JOptionPane.PLAIN_MESSAGE,null,strings,0);
+                gui.blockAllKeys();
+                gui.showMenu('r');
             }
-        }
-        if(exit == 1){
-            System.exit(0);
-        }else if(exit == 0){
-            gui.pressedKeys.clear();
-            this.init();
-            opponent.init();
         }
     }
 
