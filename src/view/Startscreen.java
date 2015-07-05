@@ -1,18 +1,12 @@
 package view;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import model.Model;
-import controller.Controller;
 
 /**
  * Created by Jonas on 03.07.2015.
  */
-public class Startscreen extends JFrame implements ActionListener{
-    private JPanel ContentPane = null;
+public class Startscreen extends JFrame {
+    /*private JPanel ContentPane = null;
     private JButton start;
     private JButton end;
 
@@ -65,5 +59,5 @@ public class Startscreen extends JFrame implements ActionListener{
         }
 
 
-    }
+    }*/
 }

@@ -3,11 +3,10 @@ package view;
 
 import processing.core.PGraphics;
 
-import java.util.PriorityQueue;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static java.awt.event.KeyEvent.*;
+
 /**
  * Created by Jonas on 03.07.2015.
  */
@@ -18,21 +17,18 @@ public class Player {
     float y;
     float speed;
     float player_width;
-    private boolean alternativeKeymap = true;
     Player opponent;
     Position position;
-    PriorityQueue<DelayedAction> delayedActions = new PriorityQueue<>();
 
     public Player(Position p, Gui gui) {
         this.position = p;
         this.gui = gui;
         if (position == Position.LEFT) {
             x = 10;
-            y = 380;
-            alternativeKeymap = false;
+            y = 350;
         } else {
             x = 990;
-            y = 380;
+            y = 350;
         }
         this.speed = gui.speed;
         player_width = 10;
@@ -51,53 +47,55 @@ public class Player {
     }
 
     public void draw(PGraphics g) {
-        while (delayedActions.peek() != null
-                && delayedActions.peek().getExecuteAfter() > System.currentTimeMillis()) {
-            delayedActions.poll().run();
-        }
         g.rect(x, y, player_width, 30);
 
     }
 
-    public void interact(Set<Integer> pressedKeys) {
-        if (pressedKeys.contains(alternativeKeymap ? VK_LEFT : VK_A)) {
+    public void interact() {
+        if (gui.isKeyPressed(position == Position.LEFT ? VK_A : VK_LEFT)) {
             moveLeft();
-        } else if (pressedKeys.contains((alternativeKeymap ? VK_RIGHT : VK_D))) {
+        } else if (gui.isKeyPressed((position == Position.LEFT ? VK_D : VK_RIGHT))) {
             moveRight();
+        }
+        if (gui.isKeyPressed((position == Position.LEFT ? VK_W : VK_UP))) {
+            jump();
+            gui.blockedKeys.put((position == Position.LEFT ? VK_W : VK_UP), System.currentTimeMillis() + 500);
         }
     }
 
     public void moveRight() {
         float xO = opponent.getX();
-        if (x < xO) {
-            float player_distance = xO - (x + player_width);
-            if (player_distance > speed) {
+        float player_distance = xO - (x + player_width);
+        if (player_distance > speed) {
+            x = x + speed;
+            playerWin();
+        } else {
+            if(x>xO){
                 x = x + speed;
                 playerWin();
-            } else {
+            }
+            else{
                 x = x + player_distance;
                 playerWin();
             }
-        } else {
-            x = x + speed;
-            playerWin();
         }
     }
 
     public void moveLeft() {
         float xO = opponent.getX();
-        if (x > xO) {
-            float player_distance = xO - (x + player_width);
-            if (player_distance > speed) {
+        float player_distance = xO - (x + player_width);
+        if (player_distance > speed) {
+            x = x - speed;
+            playerWin();
+        } else {
+            if(x>xO){
                 x = x - speed;
                 playerWin();
-            } else {
+            }
+            else{
                 x = x - player_distance;
                 playerWin();
             }
-        } else {
-            x = x - speed;
-            playerWin();
         }
     }
 
@@ -115,7 +113,7 @@ public class Player {
 
     public void jump() {
         y = y - 40;
-        delayedActions.add(new DelayedAction(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(2)) {
+        gui.delayedActions.add(new DelayedAction(System.currentTimeMillis() +200) {
             @Override
             public void run() {
                 jumpDown();
