@@ -39,8 +39,8 @@ public class Gui extends PApplet {
         blockedKeys.clear();
         delayedActions.clear();
         if (LeftPlayer != null) {
-            LeftPlayer.opponent = null;
-            RightPlayer.opponent = null;
+           LeftPlayer.opponent = null;
+           RightPlayer.opponent = null;
         }
         LeftPlayer = new Player(Position.LEFT, this);
         RightPlayer = new Player(Position.RIGHT, this);

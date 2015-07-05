@@ -129,7 +129,7 @@ public class Player {
         //Shooting key
         if (gui.isKeyPressed((position == Position.LEFT ? VK_S : VK_DOWN))){
             shoot();
-            gui.blockedKeys.put((position == Position.LEFT ? VK_S : VK_DOWN), System.currentTimeMillis() + 3500);
+            gui.blockedKeys.put((position == Position.LEFT ? VK_S : VK_DOWN), System.currentTimeMillis() + 1000);
         }
     }
 
@@ -206,15 +206,18 @@ public class Player {
     }
 
     public void playerWin() {
+
         if (position == Position.LEFT) {
             if (x >= 990) {
                 gui.blockAllKeys();
                 gui.showMenu('l');
+                WinCount = WinCount+1;
             }
         } else {
             if (x <= 10) {
                 gui.blockAllKeys();
                 gui.showMenu('r');
+                WinCount = WinCount+1;
             }
         }
     }
