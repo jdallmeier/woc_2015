@@ -28,11 +28,11 @@ public class Player {
 
     public void init() {
         if (position == Position.LEFT) {
-            x = 10;
-            y = 350;
+            x = 30;
+            y = gui.height-60;
         } else {
-            x = 990;
-            y = 350;
+            x = gui.width - (30+player_width);
+            y = gui.height-60;
         }
         this.speed = gui.speed;
         player_width = 10;
@@ -55,9 +55,19 @@ public class Player {
     public void draw(PGraphics g) {
         if(playerDistance() > 0 && onTop) {
             y = y + player_height;
+            if (position == Position.LEFT){
+                g.fill(255,0,0);
+            }else{
+                g.fill(0,0,255);
+            }
             g.rect(x, y, player_width, player_height);
             onTop = false;
         }  else {
+            if (position == Position.LEFT){
+                g.fill(255, 0, 0);
+            }else{
+                g.fill(0,0,255);
+            }
             g.rect(x, y, player_width, player_height);
         }
 
@@ -85,54 +95,60 @@ public class Player {
     }
 
     public void moveRight() {
-        if(y == opponent.getY()){
-            float xO = opponent.getX();
-            float player_distance = playerDistance();
+        if(position == Position.RIGHT && (x+speed)>(gui.width-player_width*2)) {
 
-            if (player_distance > speed) {
-                x = x + speed;
-                playerWin();
-            } else {
-                if(x>xO){
+        } else{
+            if (y == opponent.getY()) {
+                float xO = opponent.getX();
+                float player_distance = playerDistance();
+
+                if (player_distance > speed) {
                     x = x + speed;
                     playerWin();
+                } else {
+                    if (x > xO) {
+                        x = x + speed;
+                        playerWin();
+                    } else {
+                        x = x + player_distance;
+                        playerWin();
+                    }
                 }
-                else{
-                    x = x + player_distance;
-                    playerWin();
-                }
+            } else {
+                x = x + speed;
+                playerWin();
             }
-        } else {
-            x = x + speed;
-            playerWin();
         }
     }
 
     public void moveLeft() {
-        if(y == opponent.getY()) {
-            float xO = opponent.getX();
-            float player_distance;
-            if(x<xO) {
-                player_distance = xO - (x + player_width);
-            } else {
-                player_distance = x - (xO + player_width);
-            }
-            if (player_distance > speed) {
-                x = x - speed;
-                playerWin();
-            } else {
-                if(x<xO){
+        if(position == Position.LEFT && (x-speed)<player_width) {
+
+        } else {
+            if (y == opponent.getY()) {
+                float xO = opponent.getX();
+                float player_distance;
+                if (x < xO) {
+                    player_distance = xO - (x + player_width);
+                } else {
+                    player_distance = x - (xO + player_width);
+                }
+                if (player_distance > speed) {
                     x = x - speed;
                     playerWin();
+                } else {
+                    if (x < xO) {
+                        x = x - speed;
+                        playerWin();
+                    } else {
+                        x = x - player_distance;
+                        playerWin();
+                    }
                 }
-                else{
-                    x = x - player_distance;
-                    playerWin();
-                }
+            } else {
+                x = x - speed;
+                playerWin();
             }
-        } else {
-            x = x - speed;
-            playerWin();
         }
     }
 
