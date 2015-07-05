@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import processing.event.KeyEvent;
 
+import java.awt.*;
 import java.util.*;
 
 /**
@@ -17,6 +18,8 @@ public class Gui extends PApplet {
     PriorityQueue<DelayedAction> delayedActions = new PriorityQueue<>();
     Player LeftPlayer;
     Player RightPlayer;
+    boolean centered = false;
+    Window window;
 
     public void setup() {
         size(1000, 400);
@@ -25,10 +28,17 @@ public class Gui extends PApplet {
         LeftPlayer.setOpponent(RightPlayer);
         RightPlayer.setOpponent(LeftPlayer);
         bg = loadImage("background.jpg");
-
+        Container c = getParent();
+        while (c.getParent() != null) {
+            c = c.getParent();
+        }
+        if (c instanceof Window) {
+            window = (Window) c;
+        }
     }
 
     public void draw() {
+        centerWindow();
         background(bg);
         image(bg,0,0);
         while (delayedActions.peek() != null
@@ -39,27 +49,16 @@ public class Gui extends PApplet {
         RightPlayer.interact();
         LeftPlayer.draw(g);
         RightPlayer.draw(g);
-//
-//        if (pressedKeys.contains(VK_W)) {
-//            LeftPlayer.jump();
-//            blockedKeys.put(VK_W, System.currentTimeMillis() + TimeUnit.MILLISECONDS.toMillis(100));
-//        }
-//        if (pressedKeys.contains(VK_A)) {
-//            LeftPlayer.moveLeft();
-//        } else if (pressedKeys.contains(VK_D)) {
-//            LeftPlayer.moveRight();
-//        }
-//        if (pressedKeys.contains(VK_LEFT)) {
-//            RightPlayer.moveLeft();
-//        } else if (pressedKeys.contains(VK_RIGHT)) {
-//            RightPlayer.moveRight();
-//        }
-//        if (pressedKeys.contains(VK_UP)) {
-//            RightPlayer.jump();
-//            blockedKeys.put(VK_UP, System.currentTimeMillis() + TimeUnit.MILLISECONDS.toMillis(100));
-//        }
 
+    }
 
+    private void centerWindow() {
+        if (window != null && !centered) {
+            window.setLocation(displayWidth / 2 - window.getWidth() / 2, displayHeight / 2 - window.getHeight() / 2);
+            window.setMaximumSize(new Dimension(window.getWidth(), window.getHeight()));
+            window.setMinimumSize(new Dimension(window.getWidth(), window.getHeight()));
+            centered = true;
+        }
     }
 
 
