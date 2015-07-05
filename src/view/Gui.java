@@ -3,7 +3,6 @@ package view;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.event.KeyEvent;
-
 import java.awt.*;
 import java.util.*;
 
@@ -20,13 +19,11 @@ public class Gui extends PApplet {
     Player RightPlayer;
     boolean centered = false;
     Window window;
+    boolean keysBlocked = false;
 
     public void setup() {
         size(1000, 400);
-        LeftPlayer = new Player(Position.LEFT, this);
-        RightPlayer = new Player(Position.RIGHT, this);
-        LeftPlayer.setOpponent(RightPlayer);
-        RightPlayer.setOpponent(LeftPlayer);
+        initPlayers();
         bg = loadImage("background.jpg");
         Container c = getParent();
         while (c.getParent() != null) {
@@ -37,10 +34,24 @@ public class Gui extends PApplet {
         }
     }
 
+    public void initPlayers() {
+        pressedKeys.clear();
+        blockedKeys.clear();
+        delayedActions.clear();
+        if (LeftPlayer != null) {
+            LeftPlayer.opponent = null;
+            RightPlayer.opponent = null;
+        }
+        LeftPlayer = new Player(Position.LEFT, this);
+        RightPlayer = new Player(Position.RIGHT, this);
+        LeftPlayer.setOpponent(RightPlayer);
+        RightPlayer.setOpponent(LeftPlayer);
+    }
+
     public void draw() {
         centerWindow();
         background(bg);
-        image(bg,0,0);
+        image(bg, 0, 0);
         while (delayedActions.peek() != null
                 && delayedActions.peek().getExecuteAfter() < System.currentTimeMillis()) {
             delayedActions.poll().run();
@@ -49,6 +60,21 @@ public class Gui extends PApplet {
         RightPlayer.interact();
         LeftPlayer.draw(g);
         RightPlayer.draw(g);
+
+    }
+
+    public void mousePressed(){
+        //Wenn Button "Neu Starten" gedrückt wird
+        if(mouseX > ((width/2-180)-150) && mouseX < ((width/2-180)+150) && mouseY > ((height/2+20)-50) && mouseY < ((width/2+20)+50)){
+            loop();
+            keysBlocked = false;
+            initPlayers();
+        }
+
+        //Wenn Button "Beenden" gedrückt wird
+        if(mouseX > ((width/2+30)-150) && mouseX < ((width/2+30)+150) && mouseY > ((height/2+20)-50) && mouseY < ((width/2+20)+50)){
+            System.exit(0);
+        }
 
     }
 
@@ -64,8 +90,10 @@ public class Gui extends PApplet {
 
     @Override
     public void keyPressed(KeyEvent event) {
-        super.keyPressed(event);
-        pressedKeys.add(event.getKeyCode());
+        if(!keysBlocked){
+            super.keyPressed(event);
+            pressedKeys.add(event.getKeyCode());
+        }
     }
 
     @Override
@@ -90,4 +118,32 @@ public class Gui extends PApplet {
     }
 
 
+    public void showMenu(char player) {
+        noLoop();
+        rect(width/2-200,height/2-100,400,200);
+        //Button Neu starten
+        rect(width/2-180,height/2+20,150,50);
+        //Button Beenden
+        rect(width/2+30,height/2+20,150,50);
+        textSize(20);
+        fill(0,0,0);
+        text("Neu starten",width/2-180,height/2+20);
+        textSize(20);
+        fill(0,0,0);
+        text("Beenden",width/2+30,height/2+20,150,50);
+        if(player == 'l'){
+            textSize(32);
+            fill(255,0,0);
+            text("Left player won",width/2-110,height/2-50);
+        }else if(player == 'r'){
+            textSize(32);
+            fill(0, 0, 255);
+            text("Right player won",width/2-125,height/2-50);
+        }
+    }
+
+    public void blockAllKeys() {
+        keysBlocked = true;
+
+    }
 }
