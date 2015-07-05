@@ -20,8 +20,6 @@ public class Gui extends PApplet {
     boolean centered = false;
     Window window;
     boolean keysBlocked = false;
-    int WinCountR = 0;
-    int WinCountL = 0;
 
     public void setup() {
         size(1000, 400);
@@ -50,6 +48,7 @@ public class Gui extends PApplet {
         RightPlayer.setOpponent(LeftPlayer);
     }
 
+
     public void draw() {
         centerWindow();
         background(bg);
@@ -64,10 +63,10 @@ public class Gui extends PApplet {
         RightPlayer.draw(g);
         textSize(40);
         fill(255, 0, 0);
-        text(WinCountL, 10, 35);
+        text(LeftPlayer.getWinCount(), 10, 35);
         textSize(40);
         fill(0,0,255);
-        text(WinCountR,width-40 ,35);
+        text(RightPlayer.getWinCount(),width-40 ,35);
 
     }
 

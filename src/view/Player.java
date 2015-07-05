@@ -20,6 +20,10 @@ public class Player {
     boolean bulletActive;
     Bullet bullet;
 
+
+
+    int WinCount=0;
+
     public Player(Position p, Gui gui) {
         this.position = p;
         this.gui = gui;
@@ -50,6 +54,10 @@ public class Player {
 
     public float getY() {
         return y;
+    }
+
+    public int getWinCount() {
+        return WinCount;
     }
 
     public void setOpponent(Player opponent) {
