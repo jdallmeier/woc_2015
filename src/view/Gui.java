@@ -65,14 +65,14 @@ public class Gui extends PApplet {
 
     public void mousePressed(){
         //Wenn Button "Neu Starten" gedrückt wird
-        if(mouseX > ((width/2-180)-150) && mouseX < ((width/2-180)+150) && mouseY > ((height/2+20)-50) && mouseY < ((width/2+20)+50)){
+        if(mouseX > (width/2-180) && mouseX < (width/2-30) && mouseY > (height/2+20) && mouseY < (height/2+70) ){
             loop();
             keysBlocked = false;
             initPlayers();
         }
 
-        //Wenn Button "Beenden" gedrückt wird
-        if(mouseX > ((width/2+30)-150) && mouseX < ((width/2+30)+150) && mouseY > ((height/2+20)-50) && mouseY < ((width/2+20)+50)){
+        //Wenn Button "Beenden" gerueckt wird
+        if(mouseX > (width/2+30) && mouseX < (width/2+180) && mouseY > (height/2+20) && mouseY < (height/2+70) ){
             System.exit(0);
         }
 
@@ -120,17 +120,20 @@ public class Gui extends PApplet {
 
     public void showMenu(char player) {
         noLoop();
+        fill(255,255,255);
         rect(width/2-200,height/2-100,400,200);
         //Button Neu starten
+        fill(255,255,255);
         rect(width/2-180,height/2+20,150,50);
         //Button Beenden
+        fill(255,255,255);
         rect(width/2+30,height/2+20,150,50);
         textSize(20);
         fill(0,0,0);
-        text("Neu starten",width/2-180,height/2+20);
+        text("New game",width/2-155,height/2+52);
         textSize(20);
         fill(0,0,0);
-        text("Beenden",width/2+30,height/2+20,150,50);
+        text("Quit",width/2+85,height/2+52);
         if(player == 'l'){
             textSize(32);
             fill(255,0,0);
