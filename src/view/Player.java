@@ -206,15 +206,27 @@ public class Player {
     }
 
     public void playerWin() {
-        if (position == Position.LEFT) {
+        if (position == Position.LEFT && this.WinCount == 3) {
             if (x >= 990) {
                 gui.blockAllKeys();
                 gui.showMenu('l');
             }
-        } else {
+        } else if(position == Position.RIGHT && this.WinCount == 3){
             if (x <= 10) {
                 gui.blockAllKeys();
                 gui.showMenu('r');
+            }
+        }
+
+        if (position == Position.LEFT) {
+            if (x >= 990) {
+                this.WinCount = this.WinCount + 1;
+                gui.initPlayers();
+            }
+        } else {
+            if (x <= 10) {
+                this.WinCount = this.WinCount + 1;
+                gui.initPlayers();
             }
         }
     }
